@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/SIH');
-
 const userSchema = new mongoose.Schema({
     fullName: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
