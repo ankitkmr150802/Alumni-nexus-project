@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Alumni - <%= user.college %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="bg-anim"></div>
+    <header class="site-header"><div class="container nav-wrap"><a href="/dashboard" class="brand"><span class="brand-mark">AD</span><span class="brand-text">Admin Panel</span></a></div></header>
+
+    <main class="section container">
+        <div class="max-600">
+            <h1 class="section-title center">Add New Alumni</h1>
+            <p class="center muted">Fill in the details to add a new alumnus to the database.</p>
+            
+            <form id="addAlumniForm" class="card form-card" style="margin-top: 2rem;" enctype="multipart/form-data">
+                <div class="form-row"><label for="fullName">Full Name</label><input type="text" id="fullName" name="fullName" required></div>
+                <div class="form-row"><label for="email">Email</label><input type="email" id="email" name="email" required></div>
+                <div class="form-row"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" required></div>
+                <div class="form-row"><label for="image">Profile Photo</label><input type="file" id="image" name="image" accept="image/*" required></div>
+                <div class="form-row"><label for="linkedinUrl">LinkedIn Profile URL</label><input type="url" id="linkedinUrl" name="linkedinUrl"></div>
+                <div class="form-row"><label for="rollno">Roll Number</label><input type="text" id="rollno" name="rollno" required></div>
+                <div class="form-row"><label for="course">Course</label>
+                    <select id="course" name="course" required>
+                        <option value="" disabled selected>Select a Course</option>
+                        <option value="B.Tech CSE">B.Tech CSE</option><option value="B.Tech AIML">B.Tech AIML</option><option value="B.Tech AI">B.Tech AI</option><option value="B.Tech IT">B.Tech IT</option><option value="B.Tech Regional">B.Tech Regional</option><option value="B.Tech Biotech">B.Tech Biotech</option><option value="B.Tech CSBS">B.Tech CSBS</option><option value="B.Tech CYS">B.Tech CYS</option><option value="B.Tech CS">B.Tech CS</option><option value="B.Tech IT TWIN">B.Tech IT TWIN</option><option value="B.Pharma">B.Pharma</option><option value="B.Tech Mechanical">B.Tech Mechanical</option><option value="BCA">BCA</option><option value="MCA">MCA</option><option value="MBA">MBA</option><option value="BSS">BSS</option>
+                    </select>
+                </div>
+                <div class="form-row"><label for="passoutYear">Passout Year</label><input type="number" id="passoutYear" name="passoutYear" required min="1980" max="<%= new Date().getFullYear()+1%>"></div>
+                <div class="form-row"><label>Placement from College?</label>
+                    <div style="display: flex; gap: 1rem;"><input type="radio" id="placedYes" name="placedOnCampus" value="true" required> <label for="placedYes">Yes</label>
+                    <input type="radio" id="placedNo" name="placedOnCampus" value="false"> <label for="placedNo">No</label></div>
+                </div>
+                <div class="form-row"><label for="initialCompany">Initial Company</label><input type="text" id="initialCompany" name="initialCompany"></div>
+                <div class="form-row"><label for="initialPackage">Initial Package</label><input type="text" id="initialPackage" name="initialPackage"></div>
+                <div class="form-row"><label for="currentCompany">Current Company</label><input type="text" id="currentCompany" name="currentCompany" required></div>
+                <div class="form-row"><label for="currentPackage">Current Package</label><input type="text" id="currentPackage" name="currentPackage"></div>
+                <div class="form-actions" style="margin-top: 1rem;"><button type="submit" class="btn btn-primary">Save Alumni</button><a href="/dashboard" class="btn btn-outline">Cancel</a></div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('addAlumniForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            try {
+                const res = await fetch('/alumni/add', { method: 'POST', body: formData });
+                const result = await res.json();
+                if (result.success) {
+                    Swal.fire({ icon: 'success', title: 'Success!', text: result.message, timer: 2000, timerProgressBar: true })
+                    .then(() => window.location.href = '/dashboard');
+                } else { Swal.fire({ icon: 'error', title: 'Oops...', text: result.message }); }
+            } catch (err) { Swal.fire({ icon: 'error', title: 'Network Error', text: 'Could not connect.' }); }
+        });
+    </script>
+</body>
+</html>

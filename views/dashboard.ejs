@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - <%= user.college %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- SweetAlert2 Library for popups -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    /* Inline styles from previous version */
+    .profile-dropdown { position: relative; display: inline-block; }
+    .profile-btn { background-color: var(--primary); color: white; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--bg); box-shadow: var(--shadow-sm); display: grid; place-items: center; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: transform 0.2s ease; }
+    .profile-btn:hover { transform: scale(1.05); }
+    .profile-panel { display: none; position: absolute; right: 0; top: calc(100% + 10px); width: 240px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-md); z-index: 50; overflow: hidden; }
+    .profile-panel-header { padding: 1rem; border-bottom: 1px solid var(--border); }
+    .profile-panel-header .muted { font-size: 0.8rem; }
+    .profile-panel a { display: block; padding: 0.75rem 1rem; text-decoration: none; color: var(--fg); font-weight: 500; transition: background-color 0.2s ease; }
+    .profile-panel a:hover { background-color: var(--border); }
+    .stat-card-accent1 { border-top: 4px solid var(--primary); }
+    .stat-card-accent2 { border-top: 4px solid var(--accent); }
+    .stat-card-accent3 { border-top: 4px solid #f59e0b; }
+    .chatbot-toggler { position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px; background-color: var(--primary); color: white; border-radius: 50%; border: none; display: grid; place-items: center; box-shadow: var(--shadow-md); cursor: pointer; z-index: 1000; transition: transform 0.2s ease; }
+    .chatbot-toggler:hover { transform: scale(1.1); }
+    .chatbot-widget { position: fixed; bottom: calc(2rem + 80px); right: 2rem; width: 350px; max-width: calc(100vw - 4rem); max-height: 500px; background-color: var(--bg); border-radius: var(--radius); box-shadow: var(--shadow-md); border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; z-index: 1001; opacity: 0; transform: translateY(20px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; }
+    .chatbot-widget.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .chatbot-header { padding: 1rem; background-color: var(--card); border-bottom: 1px solid var(--border); font-weight: 700; }
+    .chatbot-messages { flex-grow: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; }
+    .chat-message { padding: 0.75rem 1rem; border-radius: 18px; max-width: 80%; line-height: 1.4; }
+    .chat-message.bot { background-color: var(--card); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; }
+    .chat-message.user { background-color: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .chatbot-questions { padding: 1rem; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.5rem; }
+    .chatbot-questions button { width: 100%; text-align: left; }
+
+    /* --- NEW STYLES FOR BATCH CARD ACTIONS --- */
+    .batch-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+    .batch-actions {
+        margin-top: 1.5rem;
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+    .btn-danger {
+        background-color: #fee2e2;
+        border-color: #fca5a5;
+        color: #b91c1c;
+    }
+    .btn-danger:hover {
+        background-color: #fecaca;
+        border-color: #f87171;
+        color: #991b1b;
+    }
+  </style>
+</head>
+<body>
+  <% 
+    const college = user.college.charAt(0).toUpperCase() + user.college.slice(1);
+    const name = user.fullName.charAt(0).toUpperCase() + user.fullName.slice(1);
+    const initial = user.fullName.charAt(0).toUpperCase();
+  %>
+  <div class="bg-anim"></div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="/dashboard" class="brand"><span class="brand-mark">AD</span><span class="brand-text">Admin Panel</span></a>
+      <nav class="primary-nav">
+        <div class="nav-actions">
+          <div id="profile-dropdown-desktop" class="profile-dropdown">
+            <button id="profile-btn-desktop" class="profile-btn"><%= initial %></button>
+            <div id="profile-panel-desktop" class="profile-panel">
+              <div class="profile-panel-header">
+                <strong><%= name %></strong>
+                <p class="muted" style="margin:0;">Email: <%= user.email %></p>
+                <p class="muted" style="margin:0;">College: <%= college %></p>
+              </div>
+              <a href="/logout">Logout</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="nav-right">
+        <div id="profile-dropdown-mobile" class="profile-dropdown">
+          <button id="profile-btn-mobile" class="profile-btn"><%= initial %></button>
+          <div id="profile-panel-mobile" class="profile-panel">
+            <div class="profile-panel-header"><strong><%= name %></strong><p class="muted" style="margin:0;"><%= user.email %></p></div>
+            <a href="/logout">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="section container">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+        <div>
+            <h1 class="section-title" style="margin-bottom: 0;">📊 <%= college %> Dashboard</h1>
+            <p class="muted" style="margin-top: 4px;">A quick overview of your alumni network.</p>
+        </div>
+        <a href="/alumni/invite" class="btn btn-outline">📧 Invite Alumni</a>
+        <a href="/alumni/add" class="btn btn-primary">Add Alumni</a>
+    </div>
+
+    <div class="card-grid">
+        <div class="card stat-card-accent1"><div class="card-icon" style="color: var(--primary); font-size: 2rem;">👥</div><div class="card-title">Total Alumni</div><p class="card-text" style="font-size: 1.5rem; font-weight: 700; color: var(--fg);"><%= stats.totalAlumni %></p></div>
+        <div class="card stat-card-accent2"><div class="card-icon" style="color: var(--accent); font-size: 2rem;">🧑‍🎓</div><div class="card-title">Total Placed</div><p class="card-text" style="font-size: 1.5rem; font-weight: 700; color: var(--fg);"><%= stats.companiesPlaced %></p></div>
+        <div class="card stat-card-accent3"><div class="card-icon" style="color: #f59e0b; font-size: 2rem;">📈</div><div class="card-title">Highest Package</div><p class="card-text" style="font-size: 1.5rem; font-weight: 700; color: var(--fg);"><%= stats.highestPackage %></p></div>
+    </div>
+
+    <h2 class="section-title" style="margin-top: 3rem; margin-bottom: 1rem;">Browse by Batch Year</h2>
+    <div class="card-grid">
+      <% const currentYear = new Date().getFullYear()+1; for(let i = 0; i < 10; i++) { const year = currentYear - i; %>
+        <div class="card batch-card">
+          <div> 
+            <div class="card-icon">🎓</div>
+            <div class="card-title">Batch of <%= year %></div>
+            <p class="card-text">Manage records for the year <%= year %></p>
+          </div>
+          <div class="batch-actions">
+            <a href="/alumni/year/<%= year %>" class="btn btn-outline">View</a>
+            <button class="btn btn-danger delete-batch-btn" data-year="<%= year %>">Delete</button>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-inner"><p class="small muted">© <%= new Date().getFullYear() %> Admin Dashboard</p></div></footer>
+
+  <button class="chatbot-toggler" id="chatbot-toggler" aria-label="Open chat"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></button>
+  <div class="chatbot-widget" id="chatbot-widget">
+    <div class="chatbot-header">Admin Helper</div>
+    <div class="chatbot-messages" id="chatbot-messages"><div class="chat-message bot">Hello! How can I assist you today?</div></div>
+    <div class="chatbot-questions" id="chatbot-questions"><button class="btn btn-outline">How do I add an alumnus?</button><button class="btn btn-outline">How do I view records?</button><button class="btn btn-outline">My question isn't listed.</button></div>
+  </div>
+
+  <script>
+    // --- Profile Dropdown & Chatbot Script (No Changes) ---
+    function setupDropdown(btnId, panelId) { const btn = document.getElementById(btnId); const panel = document.getElementById(panelId); if (!btn || !panel) return; btn.addEventListener('click', (event) => { event.stopPropagation(); const isVisible = panel.style.display === 'block'; document.querySelectorAll('.profile-panel').forEach(p => p.style.display = 'none'); panel.style.display = isVisible ? 'none' : 'block'; }); }
+    setupDropdown('profile-btn-desktop', 'profile-panel-desktop');
+    setupDropdown('profile-btn-mobile', 'profile-panel-mobile');
+    document.addEventListener('click', () => document.querySelectorAll('.profile-panel').forEach(p => p.style.display = 'none'));
+    const chatbotToggler = document.getElementById('chatbot-toggler'); const chatbotWidget = document.getElementById('chatbot-widget'); const chatbotMessages = document.getElementById('chatbot-messages'); const questionButtons = document.querySelectorAll('#chatbot-questions button');
+    const qaPairs = { "How do I add an alumnus?": "Click the ' Add Alumni' button at the top of the dashboard.", "How do I view records?": "Click the 'View' button on any 'Batch of [Year]' card.", "My question isn't listed.": "For more help, please contact us at <a href='mailto:abc@gmail.com'>abc@gmail.com</a>." };
+    chatbotToggler.addEventListener('click', () => { chatbotWidget.classList.toggle('open'); });
+    questionButtons.forEach(button => { button.addEventListener('click', () => { const question = button.textContent; const answer = qaPairs[question]; const userMessage = document.createElement('div'); userMessage.className = 'chat-message user'; userMessage.textContent = question; chatbotMessages.appendChild(userMessage); setTimeout(() => { const botMessage = document.createElement('div'); botMessage.className = 'chat-message bot'; botMessage.innerHTML = answer; chatbotMessages.appendChild(botMessage); chatbotMessages.scrollTop = chatbotMessages.scrollHeight; }, 500); }); });
+
+    // --- NEW SCRIPT FOR BATCH DELETION ---
+    const deleteButtons = document.querySelectorAll('.delete-batch-btn');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const year = e.target.dataset.year;
+            Swal.fire({
+                title: `Delete Batch of ${year}?`,
+                text: "You won't be able to revert this! All alumni records for this year will be permanently deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/alumni/year/${year}/delete`, {
+                        method: 'POST',
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Deleted!', data.message, 'success')
+                            .then(() => { window.location.reload(); });
+                        } else {
+                            Swal.fire('Error!', data.message, 'error');
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire('Error!', 'Could not connect to the server.', 'error');
+                    });
+                }
+            });
+        });
+    });
+  </script>
+</body>
+</html>
+

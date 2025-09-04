@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Update <%= alumnus.fullName %> - <%= user.college %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="bg-anim"></div>
+    <header class="site-header"><div class="container nav-wrap"><a href="/dashboard" class="brand"><span class="brand-mark">AD</span><span class="brand-text">Admin Panel</span></a></div></header>
+    <main class="section container">
+        <div class="max-600">
+            <h1 class="section-title center">✏️ Update Alumni Record</h1>
+            <p class="center muted">Modify the details for <%= alumnus.fullName %>.</p>
+            <div class="center" style="margin-top:1rem;"><img src="<%= alumnus.image %>" alt="Current Photo" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;"></div>
+            <form id="updateAlumniForm" class="card form-card" style="margin-top: 1rem;" enctype="multipart/form-data">
+                <div class="form-row"><label for="fullName">Full Name</label><input type="text" id="fullName" name="fullName" value="<%= alumnus.fullName %>" required></div>
+                <div class="form-row"><label for="image">Change Profile Photo (optional)</label><input type="file" id="image" name="image" accept="image/*"></div>
+                <div class="form-row"><label for="email">Email</label><input type="email" id="email" name="email" value="<%= alumnus.email %>" required></div>
+                <div class="form-row"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" value="<%= alumnus.phone %>" required></div>
+                <div class="form-row"><label for="linkedinUrl">LinkedIn Profile URL</label><input type="url" id="linkedinUrl" name="linkedinUrl" value="<%= alumnus.linkedinUrl %>"></div>
+                <div class="form-row"><label for="rollno">Roll Number</label><input type="text" id="rollno" name="rollno" value="<%= alumnus.rollno %>" required></div>
+                <div class="form-row"><label for="course">Course</label>
+                    <select id="course" name="course" required>
+                        <% const courses = ["B.Tech CSE", "B.Tech AIML", "B.Tech AI", "B.Tech IT", "B.Tech Regional", "B.Tech Biotech", "B.Tech CSBS", "B.Tech CYS", "B.Tech CS", "B.Tech IT TWIN", "B.Pharma", "B.Tech Mechanical", "BCA", "MCA", "MBA"]; %>
+                        <% courses.forEach(course => { %>
+                            <option value="<%= course %>" <%= alumnus.course === course ? 'selected' : '' %>><%= course %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="form-row"><label for="passoutYear">Passout Year</label><input type="number" id="passoutYear" name="passoutYear" value="<%= alumnus.passoutYear %>" required></div>
+                <div class="form-row"><label>Placement from College?</label>
+                    <div style="display: flex; gap: 0.2rem;">
+                        <input type="radio" id="placedYes" name="placedOnCampus" value="true" <%= alumnus.placedOnCampus ? 'checked' : '' %> required> <label for="placedYes">Yes</label>
+                        <input type="radio" id="placedNo" name="placedOnCampus" value="false" <%= !alumnus.placedOnCampus ? 'checked' : '' %>> <label for="placedNo">No</label>
+                    </div>
+                </div>
+                <div class="form-row"><label for="initialCompany">Initial Company</label><input type="text" id="initialCompany" name="initialCompany" value="<%= alumnus.initialCompany || '' %>"></div>
+                <div class="form-row"><label for="initialPackage">Initial Package</label><input type="text" id="initialPackage" name="initialPackage" value="<%= alumnus.initialPackage || '' %>"></div>
+                <div class="form-row"><label for="currentCompany">Current Company</label><input type="text" id="currentCompany" name="currentCompany" value="<%= alumnus.currentCompany %>" required></div>
+                <div class="form-row"><label for="currentPackage">Current Package</label><input type="text" id="currentPackage" name="currentPackage" value="<%= alumnus.currentPackage || '' %>"></div>
+                <div class="form-actions" style="margin-top: 1rem;"><button type="submit" class="btn btn-primary">Update Record</button><a href="/alumni/year/<%= alumnus.passoutYear %>" class="btn btn-outline">Cancel</a></div>
+            </form>
+        </div>
+    </main>
+    <script>
+        document.getElementById('updateAlumniForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            try {
+                const res = await fetch(window.location.pathname, { method: 'POST', body: formData });
+                const result = await res.json();
+                if (result.success) {
+                    Swal.fire({ icon: 'success', title: 'Updated!', text: result.message, timer: 2000, timerProgressBar: true })
+                    .then(() => window.location.href = `/alumni/year/<%= alumnus.passoutYear %>`);
+                } else { Swal.fire({ icon: 'error', title: 'Oops...', text: result.message }); }
+            } catch (err) { Swal.fire({ icon: 'error', title: 'Network Error', text: 'Could not connect.' }); }
+        });
+    </script>
+</body>
+</html>

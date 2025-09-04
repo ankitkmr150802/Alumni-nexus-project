@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Invite Alumni - <%= user.college %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="bg-anim"></div>
+    <header class="site-header"><div class="container nav-wrap"><a href="/dashboard" class="brand"><span class="brand-mark">AD</span><span class="brand-text">Admin Panel</span></a></div></header>
+
+    <main class="section container">
+        <div class="max-600">
+            <h1 class="section-title center">📧 Invite an Alumnus</h1>
+            <p class="center muted">Fill in the core details. A secure invitation link will be sent to the alumnus to complete their profile.</p>
+            
+            <form id="inviteForm" class="card form-card" style="margin-top: 2rem;">
+                <div class="form-row"><label for="fullName">Full Name</label><input type="text" id="fullName" name="fullName" required></div>
+                <div class="form-row"><label for="email">Email Address</label><input type="email" id="email" name="email" required></div>
+                <div class="form-row"><label for="rollno">Roll Number</label><input type="text" id="rollno" name="rollno" required></div>
+                <div class="form-row"><label for="passoutYear">Passout Year</label><input type="number" id="passoutYear" name="passoutYear" required min="1980" max="<%= new Date().getFullYear()+1 %>"></div>
+                
+                <div class="form-actions" style="margin-top: 1rem;">
+                    <button type="submit" class="btn btn-primary">Send Invitation</button>
+                    <a href="/dashboard" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('inviteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            try {
+                const res = await fetch('/alumni/invite', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    Swal.fire({ icon: 'success', title: 'Invitation Sent!', text: result.message, timer: 2500, timerProgressBar: true })
+                    .then(() => { e.target.reset(); });
+                } else { Swal.fire({ icon: 'error', title: 'Oops...', text: result.message }); }
+            } catch (err) { Swal.fire({ icon: 'error', title: 'Network Error', text: 'Could not connect.' }); }
+        });
+    </script>
+</body>
+</html>
+

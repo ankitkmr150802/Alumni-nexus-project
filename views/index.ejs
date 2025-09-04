@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en" data-theme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Alumni Nexus — Centralized Alumni Data & Engagement</title>
+    <meta name="description" content="A centralized digital platform for alumni data management and engagement—built for colleges to connect, track outcomes, and foster community." />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+  </head>
+  <body>
+     <!-- lightweight preloader shown until window load  -->
+    <div id="preloader" class="preloader" aria-hidden="true">
+      <div class="spinner" aria-label="Loading"></div>
+      <p class="preloader-text">Loading Alumni Nexus…</p>
+    </div>
+
+     <!-- CSS-only subtle animated background (replaces canvas)  -->
+    <div class="bg-anim" aria-hidden="true"></div>
+
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a href="#" class="brand" aria-label="Alumni Nexus home">
+          <span class="brand-mark" aria-hidden="true">AN</span>
+          <span class="brand-text">Alumni Nexus</span>
+        </a>
+
+         <!-- new right-side group for mobile (visible on mobile only): theme toggle + auth + hamburger  -->
+        <div class="nav-right">
+          <div class="nav-actions-compact">
+            <button class="icon-btn" data-theme-toggle aria-label="Toggle dark mode" aria-pressed="false" title="Toggle theme">
+              <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5.64 5.64 4.22 4.22m15.56 15.56-1.42-1.42M5.64 18.36 4.22 19.78m15.56-15.56-1.42 1.42" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" /><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+              <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" fill="currentColor"/></svg>
+            </button>
+            <button class="btn btn-outline" data-open-auth="login">Log in</button>
+            <button class="btn btn-primary" data-open-auth="signup">Sign up</button>
+          </div>
+
+           <!-- hamburger (mobile)  -->
+          <button class="nav-toggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+         </CHANGE> 
+
+         <!-- Desktop nav  -->
+        <nav class="primary-nav" aria-label="Primary">
+          <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#benefits">Benefits</a></li>
+            <li><a href="#faqs">FAQs</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+
+          <div class="nav-actions">
+            <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle theme">
+              <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5.64 5.64 4.22 4.22m15.56 15.56-1.42-1.42M5.64 18.36 4.22 19.78m15.56-15.56-1.42 1.42" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" /><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+              <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" fill="currentColor"/></svg>
+            </button>
+            <button class="btn btn-outline" id="loginBtn">Log in</button>
+            <button class="btn btn-primary" data-scroll-to="#contact">Get Started</button>
+          </div>
+
+           <!-- removed the old nav-actions-compact from inside primary-nav so it doesn't show/hide with desktop nav  -->
+        </nav>
+      </div>
+
+       <!-- Mobile drawer menu (hidden by default)  -->
+      <nav id="mobileMenu" class="mobile-menu" aria-label="Mobile" aria-hidden="true">
+        <div class="mobile-inner container">
+          <button class="close-menu" aria-label="Close menu">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6l12 12M6 18L18 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <ul class="mobile-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#benefits">Benefits</a></li>
+            <li><a href="#faqs">FAQs</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <div class="mobile-actions">
+            <button id="theme-toggle-mobile" class="icon-btn" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle theme">
+              <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5.64 5.64 4.22 4.22m15.56 15.56-1.42-1.42M5.64 18.36 4.22 19.78m15.56-15.56-1.42 1.42" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" /><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+              <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" fill="currentColor"/></svg>
+            </button>
+            <button class="btn btn-outline" id="loginBtnMobile">Log in</button>
+            <button class="btn btn-primary" data-scroll-to="#contact">Get Started</button>
+          </div>
+        </div>
+      </nav>
+      <div class="scrim" data-close-menu aria-hidden="true"></div>
+    </header>
+
+    <main id="main-content">
+       <!-- Hero  -->
+      <section class="section hero" id="hero">
+        <div class="container hero-inner">
+          <div class="hero-content">
+            <h1 class="hero-title text-balance">Centralized Alumni Data & Engagement for Your College</h1>
+            <p class="hero-subtitle text-pretty">
+              Unify alumni records, track outcomes, and strengthen alumni relationships with a secure, modern platform built for higher education.
+            </p>
+            <div class="hero-ctas">
+              <button class="btn btn-primary" data-scroll-to="#contact">Request a Demo</button>
+              <a class="btn btn-ghost" href="#benefits">Explore Benefits</a>
+            </div>
+
+            <ul class="hero-highlights">
+              <li>
+                <span class="badge">Verified Profiles</span> Clean, deduplicated alumni records
+              </li>
+              <li>
+                <span class="badge">Engagement Tools</span> Events, mentorship, and campaigns
+              </li>
+              <li>
+                <span class="badge">Insights</span> Career outcomes & employment analytics
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+       <!-- About  -->
+      <section class="section" id="about">
+        <div class="container split">
+          <div class="split-col">
+            <h2 class="section-title">Who We Are</h2>
+            <p class="muted">
+              We’re an education-first team focused on helping colleges build thriving alumni communities. Our platform centralizes data and equips your staff with modern engagement tools.
+            </p>
+            <ul class="feature-list">
+              <li><span class="feature-icon" aria-hidden="true">🏫</span>Built for colleges and alumni offices</li>
+              <li><span class="feature-icon" aria-hidden="true">🔒</span>Privacy-first with secure data controls</li>
+              <li><span class="feature-icon" aria-hidden="true">🤝</span>Dedicated support and onboarding</li>
+            </ul>
+          </div>
+          <div class="split-col">
+            <h2 class="section-title">What We Do</h2>
+            <p class="muted">
+              We unify alumni records, facilitate engagement through events and mentorship, and surface insights to support outcomes tracking and accreditation.
+            </p>
+            <ul class="feature-list">
+              <li><span class="feature-icon" aria-hidden="true">🗂️</span>Centralized alumni profiles & deduplication</li>
+              <li><span class="feature-icon" aria-hidden="true">📣</span>Campaigns, newsletters, and event RSVPs</li>
+              <li><span class="feature-icon" aria-hidden="true">📊</span>Dashboards for placements and outcomes</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+       <!-- Benefits  -->
+      <section class="section" id="benefits">
+        <div class="container">
+          <h2 class="section-title center">Benefits</h2>
+          <p class="muted center max-600">
+            Everything you need to manage alumni data and engagement in one place—secure, scalable, and easy to use.
+          </p>
+
+          <div class="card-grid">
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">🧭</div>
+              <h3 class="card-title">Single Source of Truth</h3>
+              <p class="card-text">Consolidate records across spreadsheets, forms, and legacy systems.</p>
+            </article>
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">⚙️</div>
+              <h3 class="card-title">Automation Ready</h3>
+              <p class="card-text">Reduce manual work with smart imports and updates.</p>
+            </article>
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">🧑‍🏫</div>
+              <h3 class="card-title">Mentorship & Events</h3>
+              <p class="card-text">Connect alumni to students and track participation.</p>
+            </article>
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">🔐</div>
+              <h3 class="card-title">Security & Privacy</h3>
+              <p class="card-text">Granular access, encryption, and privacy controls.</p>
+            </article>
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">📈</div>
+              <h3 class="card-title">Outcome Insights</h3>
+              <p class="card-text">Measure placements, sectors, and career progression.</p>
+            </article>
+            <article class="card">
+              <div class="card-icon" aria-hidden="true">🚀</div>
+              <h3 class="card-title">Fast Onboarding</h3>
+              <p class="card-text">Get started in days with guided setup and support.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+       <!-- FAQs  -->
+      <section class="section" id="faqs">
+        <div class="container">
+          <h2 class="section-title center">FAQs</h2>
+          <div class="faq-list">
+            <details>
+              <summary>How do you keep alumni data accurate?</summary>
+              <p>We use deduplication, verification prompts, and optional periodic check-ins to keep profiles up-to-date.</p>
+            </details>
+            <details>
+              <summary>Can students access the platform?</summary>
+              <p>Yes, you can enable student access for mentorship matching, events, and networking, controlled by admin permissions.</p>
+            </details>
+            <details>
+              <summary>Is our data secure?</summary>
+              <p>We follow best practices for encryption in transit and at rest, least-privilege access, and detailed audit logs.</p>
+            </details>
+            <details>
+              <summary>Do you help with onboarding?</summary>
+              <p>Absolutely. We offer data import assistance, training sessions, and dedicated support.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+       <!-- Contact  -->
+      <section class="section" id="contact">
+        <div class="container split contact-wrap">
+          <div class="split-col">
+            <h2 class="section-title">Contact Us</h2>
+            <p class="muted">Have questions or want a demo? Reach out and we’ll get back within 1–2 business days.</p>
+            <ul class="contact-list">
+              <li>
+                <svg class="icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z" fill="none"/><path d="M4 6l8 6 8-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                hello@alumninexus.io
+              </li>
+              <li>
+                <svg class="icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92V21a1 1 0 0 1-1.1 1A19.8 19.8 0 0 1 3 5.1 1 1 0 0 1 4 4h4.09a1 1 0 0 1 1 .75l1 3.49a1 1 0 0 1-.27 1L8.09 10.91a16 16 0 0 0 5 5l1.67-1.67a1 1 0 0 1 1-.27l3.49 1a1 1 0 0 1 .75 1V21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                +1 (555) 012-3456
+              </li>
+              <li>
+                <svg class="icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l7 7-7 13L5 9l7-7z" fill="currentColor"/></svg>
+                123 College Ave, Suite 200
+              </li>
+            </ul>
+          </div>
+
+          <div class="split-col">
+            <form id="contactForm" class="card form-card" novalidate>
+              <div class="form-row">
+                <label for="name">Full Name</label>
+                <input id="name" name="name" type="text" placeholder="Jane Doe" required />
+                <span class="field-hint" data-for="name"></span>
+              </div>
+              <div class="form-row">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="jane@college.edu" required />
+                <span class="field-hint" data-for="email"></span>
+              </div>
+              <div class="form-row">
+                <label for="college">College / Dept</label>
+                <input id="college" name="college" type="text" placeholder="ABC College — Alumni Office" />
+              </div>
+              <div class="form-row">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="4" placeholder="Tell us what you’re looking for…" required></textarea>
+                <span class="field-hint" data-for="message"></span>
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Send Message</button>
+                <p class="muted small">We’ll never share your information.</p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p class="muted small">© <span id="year"></span> Alumni Nexus. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#about">About</a>
+          <a href="#benefits">Benefits</a>
+          <a href="#faqs">FAQs</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+     <!-- Auth Modal  -->
+    <div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle" aria-hidden="true">
+      <div class="modal-backdrop" data-close-modal></div>
+      <div class="modal-panel" role="document">
+        <div class="modal-header">
+          <h3 id="authTitle" class="modal-title">Welcome back</h3>
+          <button class="icon-btn" aria-label="Close" data-close-modal>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Authentication">
+          <button class="tab active" role="tab" aria-selected="true" aria-controls="loginTab" id="loginTabBtn">Log in</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="signupTab" id="signupTabBtn">Sign up</button>
+        </div>
+        <div class="tab-panels">
+          <form id="loginTab" class="tab-panel active" action="/login" method = "post" aria-labelledby="loginTabBtn" novalidate>
+            <div class="form-row">
+              <label for="loginEmail">Email</label>
+              <input id="loginEmail" type="email" placeholder="you@college.edu"  name = "email"required />
+            </div>
+            <div class="form-row">
+              <label for="loginPassword">Password</label>
+              <input id="loginPassword" type="password" placeholder="••••••••" name = "password" required />
+            </div>
+            <button class="btn btn-primary" type="submit">Log in</button>
+          </form>
+
+          <form id="signupTab" class="tab-panel" action="/register" method = "post" aria-labelledby="signupTabBtn" novalidate>
+            <div class="form-row">
+              <label for="signupName">Full Name</label>
+              <input id="signupName" type="text" placeholder="Enter name" name = "fullName" required />
+            </div>
+            <div class="form-row">
+              <label for="signupEmail">Email</label>
+              <input id="signupEmail" type="email" placeholder="you@college.edu" name = "email" required />
+            </div>
+            <div class="form-row">
+              <label for="signupPassword">Password</label>
+              <input id="signupPassword" type="password" placeholder="Create a password" name = "password" required />
+            </div>
+            <div class="form-row">
+              <label for="college">College</label>
+              <select name="college" id="college-select" required>
+                <option value="" disabled selected>Select Your College</option>
+                <option value="niet">Noida Institute Of Eng. & Technology</option>
+                <option value="glbit">GL Bajaj Institute of Technology</option>
+                <option value="ggc">Galgotia College</option>
+                <option value="llc">Lloyd college</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Create account</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
+     <!-- Toast  -->
+    <div id="toast" role="status" aria-live="polite" class="toast" aria-hidden="true"></div>
+    <script defer src="script.js"></script>
+</body>
+</html>
