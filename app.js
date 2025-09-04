@@ -11,6 +11,15 @@ const Alumni = require("./models/alumni");
 const multer = require('multer');
 const nodemailer = require('nodemailer');
 
+mongoose.connect(process.env.DATABASE_URL)
+    .then(() => {
+        console.log("Online DB Connected Successfully!");
+    })
+    .catch((err) => {
+        console.error("DB Connection Error:", err);
+    });
+
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         // Folder jahan files save hongi
